@@ -1,5 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:D:/2DVideo/backend/media/videos/manim2D/1080p60/partial_movie_files/RotatingSquare/3529212410_2465723522_735197471.mp4'
-file 'file:D:/2DVideo/backend/media/videos/manim2D/1080p60/partial_movie_files/RotatingSquare/3040924799_4003339786_735197471.mp4'
-file 'file:D:/2DVideo/backend/media/videos/manim2D/1080p60/partial_movie_files/RotatingSquare/3040924799_399232953_735197471.mp4'
-file 'file:D:/2DVideo/backend/media/videos/manim2D/1080p60/partial_movie_files/RotatingSquare/3040924799_4071516364_631829896.mp4'
