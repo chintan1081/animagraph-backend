@@ -44,6 +44,7 @@ async function VideoCodeGeneration(prompt) {
         .replace(/^```python\s*/, '')
         .replace(/```[\s\r\n]*$/, '')   
     await fs.writeFile(filePath, cleanedCode);
+    return cleanedCode
 }
 
 export default VideoCodeGeneration;

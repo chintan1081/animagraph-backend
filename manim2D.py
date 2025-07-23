@@ -1,24 +1,27 @@
 from manim import *
 
+
 class Manim2DVideos(Scene):
     def construct(self):
-        square = Square(side_length=3)
-        circle = Circle(radius=1.5)
-        circle.move_to(square.get_center())
+        circle = Circle(radius=2)
+        self.add(circle)
 
-        square_label = MathTex("\\text{Square}")
-        circle_label = MathTex("\\text{Circle}")
+        dot = Dot(circle.point_from_proportion(0))
+        self.add(dot)
 
-        square_label.next_to(square, UP)
-        circle_label.next_to(circle, UP)
+        line = Line(circle.get_center(), dot.get_center())
+        self.add(line)
 
-        self.add(square, square_label)
+        def update_dot(mob, alpha):
+            mob.move_to(circle.point_from_proportion(alpha))
+            return mob
 
-        self.play(
-            Transform(square, circle),
-            Transform(square_label, circle_label),
-            run_time=3,
-            rate_func=rate_functions.ease_in_out_sine
-        )
+        def update_line(mob):
+            mob.become(Line(circle.get_center(), dot.get_center()))
+            return mob
 
-        self.wait(2)
+        self.play(UpdateFromAlphaFunc(dot, update_dot),
+                  UpdateFromFunc(line, update_line),
+                  rate_func=rate_functions.linear, run_time=5)
+        self.wait(1)
+
