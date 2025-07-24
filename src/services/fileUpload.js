@@ -1,17 +1,22 @@
 import fs from 'fs';
 import fetch from 'node-fetch';
 
-async function fileUpload(path) {
+export async function fileUpload(path) {
     const fileContent = fs.readFileSync(path);
 
-    const dropboxToken = 'sl.u.AF0GqdXqtyzFVcyIDyh53M97TD4ePkoy_H_V0J1aTZg697lQR5-6AYz71-S4MkI2W5Uh26Xg2W7DEPHuk7aIsE_sTnsmoukuVDmJ5UYHXg8rjiJqypFhzkMyUVL8cr_taO9L95XIiZcCAdXIhAWN_JHeyI7acCiVH3yUjiEXdX-7I8OsFbuy_qMD5RTY2vi-_wjjzGu9aphh5clF6U9y73u2N0QM9OrtHKh_p8mUVXcGQ5JbxoJUFepz-lPfAALsAet58ANKqvyYSzzIycTjuy66tEc1WjjF3U-DYf75fVtaRbyvVPsuA0zkhoiIIm3BDV7C4EBeZCmCepYsPV_EJDj-vvXa99RqRhu0HwdeWz7C6r77EJyC47T4xbNPNvRa2O22c36pNwvLSdb8Ro3g1VMM8tcYuvtEFCUjsS_QB6QlkRz4f-1GUcCnG3iAO-wLGrTEYw7nQJ6EtbX9xUdw0oulowSNmncZ046R6WxgdwN4VNfNNdXq0usQDCC2_qyxrfDMcby6TxAI4ZmQ6DxQlLuyfqRf_Ztmv6AnJ360jbRS9xyky_D2iFctgEWmDgQ0CFFLJp1ZWn18thprvmbZp5m_S42Or-9dU6L3RGpZ7IwRG6aZvJSpAA3aXfXN9QBvBuCLEB7R4XxQtzMepKw-Kk3v6zBDV4CcdUwfqvajKxsRhBEaN-BUKWSW9QGNoBzk0OUCp2yL3ghvusIBy-QGw7YHNL3f-BioxE4MT_FiI62JfXoCadsstQgVvRvgh8a7XOMJ5zKhD3vztm6Kya854YnI6C7Pxg9Yw5S50hjA2rxDRzg065Xop3uFayTTJ65qaKnR94FSO4Fe3JLFJiPysPVQozBxZXj4TzHBiK382tneET7Mtx4AAZ3zNaiBG_e8kSbRTZ7GgjMFV2shG6M-PkjbFCAU7mfqZtnWPykXp8j4LzhQztrBU1X3eQpJje9Xk72BxduDS9Pi_sRpieaudt_almDQa7K-9DlN7y4KFtUKqlu3iWASPKuxYbJwGwIUc1tb-bjLDkRBKzu0af63Jh1dd512iWbkXsaZNd4XpDl11XO0DXcvM0IKcwUBlnc2JCMjmeeVpsai273BNw0WJh9Ndo1Tv-hYmiisQocXtWywjAYXkREyzQKzwzsD7eE9aagY0cRSNzB9dfVKSNQuS1TdM5l3ujkUo1Emftdv8ZgwFu29BbcG9QWkNDhGpyZEYe8rUGbaTyHWhM_Ef3bkuBgjrQptpjDm8KYJEY1CzROIglrGShdoxlrV19-P_c5qJRldJFwIgAHT4ThoMhRYO4b6OmBkvolNMrNbZRigdVPoJs93CijJVJyi7AMT4Trm_QfBLvTAQImEy2pmt6osorlvl8NXusGJKkgjTPSX0GDb-6CTv9Gu0eAZYJmdJdgtcCp_U3GFDaWfDgoaF-woVdso0gIfH68gx00MAkjYspUqWQ'
-    const response = await fetch('https://content.dropboxapi.com/2/files/upload', {
+    const APP_KEY = 'pdt80u8u9lxxiot';
+    const APP_SECRET = 'rsyblptuhb0ul5c';
+    const REFRESH_TOKEN = 'your_permanent_refresh_token';
+
+    const accessToken = 'sl.u.AF3G_i0RtkfERsrJnvWPJhzPNvVT0TjfGEvZULmJ8igyd0DvzGbPPYFB4Dc2ZK4hDnZrO4a21_3tnGulaBmKkzGRJ8Ilc3QNcxecDZ2r4ihTWSGCVxOQxk4ll9cG7vDTGDPjRlkUDD3arVCC6B5tmC4scVJA4TN4L6eMHrS2LjUfN8dpjDSxIWWfxAaPlN3JDtMuUl8szj4eEP5GTSkM-0p1utgPXdmGJKWyEYxDsNiB-yurjb5XLZ0PXML5iuUd3TysPqiVLARhqK7ewEwVBen7ALrShxcM3Sqp1oRHrf8FEdOPAkrIBAxrCFHtWFODHNLUfDJZ2i1nXK_G4XDwMg0E0v66HNCPzT6VRvfPtyK01WmHlnTRJzPdX8AGsL1xZ9RqAoibDuKQowMWBgEPYh0NqnbQR1JnZYZg2KRB6bbsbSefqvEL-eBebU_orWoQZzHAIx65BHq6IxNjEblEmrvQQ5b_5H0HQTiiqSaz89IKlcMx3jdcg8dmkybEWfz2O9EE02ZAO4aDs0SHgYJw6kUo9aSXhGI5zFYdEiKKT8vEpFnY2zF7uEAVmS3KMhn0mwiuOh35PJBn1ORhAmrYy8tFi98g55MqqCvxgVbrh_locSpnOI6xfpsuIsfeuGTshRctMC55zf-pBd38u4z8ZuKG9HeVUtIjukLkUfOLq90vPHj6JP9aL8V0y0NlLNRcpHKwH4Bz8MifqxbwVF0vOx60TKPP9SvDb13TDE4OjYTVqf4hNmmTCjMg7fp3daQe0pDRTOwXgjmhol8DkQUpcTh5vJFoLDnNN7DReCb6Pll5uN8ELV1nud7r6dPGZlo5vhOzeLSgG-MyLx_OyY5bumKhjsoGtS62oCMpMaUno4YRWZBotf7FEHb8NRb2iYHHGKbOwd0yirKPg5MsNIpczvXdol0zaOOwFTYfzJuZZKrMKiyEaXMMgczPK-QP7MixLhcDNdWER0_0FAQzXQOIegZkwKa4eYKxsTQf5tntpFAAHG6yGP0shhOauU8miyAZnfzaq-tI-N2C8T0VYwVFeSNC3xWu9DicJY1ootL1RXBiVFRsV6XZo139EZqa8ceJytJwvqqxD2UdJaosElRJhQKbjtCPrIwhAgQ8zCkIjMGIpEGEJP5Gk5PwmsmIe0heRLCsTvs1oKOAUSjRA4qAYx-xAMt350F0ZCoRLD_szCRHhzZszP-eVVwiR2_l87jhCmgi4zOw4aEfu77DExbsgCgN8YLnEiYhfjNEGkbmmM1xO81Ua4W3EZK347sFx40rNpIlP89z0ZsUfuehlwaK5SApIUZyYv9swKt5b6tSQnnQvuDPASpy-IGucjanaXW8ykmkPCl0p1vI_XRVm7PrnyCEiyauyERhwSKmG4DSHugJc3D-F0nASQ9Jca8zNDc3k__fueocL97Lce1aH57ZLLtuO17FXTruMMP_Jy5xdLs3Rw'
+
+    const uploadRes = await fetch('https://content.dropboxapi.com/2/files/upload', {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${dropboxToken}`,
+            'Authorization': `Bearer ${accessToken}`,
             'Content-Type': 'application/octet-stream',
             'Dropbox-API-Arg': JSON.stringify({
-                path: '/videos/Manim2DVideos.mp4',
+                path: `/videos/Manim2DVideo-${Date.now()}.mp4`,
                 mode: 'add',
                 autorename: true,
                 mute: false
@@ -20,33 +25,34 @@ async function fileUpload(path) {
         body: fileContent
     });
 
-    if (response.ok) {
-        const result = await response.json();
-        console.log('✅ File uploaded successfully:', result);
-    } else {
-        const errorText = await response.text();
-        console.error('❌ Upload failed:', response.status, errorText);
+    if (!uploadRes.ok) {
+        const error = await uploadRes.text();
+        throw new Error(`❌ Upload failed: ${error}`);
     }
 
-    const urlResponse = await fetch('https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings', {
+    const uploadData = await uploadRes.json();
+    console.log('✅ Uploaded to:', uploadData.path_display);
+
+    const downloadRes = await fetch('https://content.dropboxapi.com/2/files/download', {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${dropboxToken}`,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            path: '/videos/Manim2DVideos.mp4',
-            direct_only: true
-        })
+            'Authorization': `Bearer ${accessToken}`,
+            'Dropbox-API-Arg': JSON.stringify({
+                path: uploadData.path_display
+            })
+        }
     });
 
-
-    if (urlResponse.ok) {
-        const result = await urlResponse.json();
-        return result.url;
-    } else {
-        const errorText = await urlResponse.text();
-        console.error('Upload failed:', urlResponse.status, errorText);
+    if (!downloadRes.ok) {
+        const error = await downloadRes.text();
+        throw new Error(`❌ Download failed: ${error}`);
     }
+
+    const blob = await downloadRes.blob();
+
+    const buffer = await blob.arrayBuffer();
+    const base64 = Buffer.from(buffer).toString('base64');
+
+    return base64;
 
 }

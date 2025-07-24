@@ -18,7 +18,6 @@ function setupWebSocket(server) {
   });
 }
 
-// Function to broadcast to all clients
 function broadcast(data) {
   if (!wss) return;
   wss.clients.forEach((client) => {

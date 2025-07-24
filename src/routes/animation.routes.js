@@ -17,27 +17,26 @@ import { broadcast } from '../services/websocket.js';
 import TextGeneration from '../services/textGeneration.js';
 import AppDataSource from '../database/ormconfig.js';
 import { log } from 'console';
+import { fileUpload } from '../services/fileUpload.js';
 
 
 router.post('/', async (req, res) => {
     const prompt = req.body.prompt;
     const codeGenerated = await VideoCodeGeneration(prompt)
-    TextGeneration(prompt)
+    const llmChat = await TextGeneration(prompt)
 
     const cmd = `python -m manim -qh "${path.join(__dirname, '../../', 'manim2D.py')}" Manim2DVideos`;
     try {
         await execPromise(cmd);
 
-        console.log(path.join(__dirname, '../../', '/media/videos/manim2D/1080p60/Manim2DVideos.mp4'), "................................wo");
-
         const fileUrl = await fileUpload(path.join(__dirname, '../../', '/media/videos/manim2D/1080p60/Manim2DVideos.mp4'))
-
         if (!AppDataSource.isInitialized) await AppDataSource.initialize();
         const repo = AppDataSource.getRepository("UserGeneration");
         const record = repo.create({
             prompt,
             codeGenerated,
-            videoUrl: fileUrl
+            videoUrl: fileUrl,
+            llmChat
         });
 
         await repo.save(record);
@@ -48,5 +47,24 @@ router.post('/', async (req, res) => {
         res.json({ videoGernerationError: error })
     }
 })
+
+
+router.get('/history', async (req, res) => {
+    try {
+        if (!AppDataSource.isInitialized) await AppDataSource.initialize();
+        const repo = AppDataSource.getRepository("UserGeneration");
+
+        const records = await repo.find({
+            select: ["llmChat", "prompt"]
+        });
+        console.log(records,'...................');
+        res.setHeader('Content-Type', 'application/json');
+        res.json({ history: records });
+    } catch (error) {
+        console.error('Error fetching history:', error);
+        res.status(500).json({ error: 'Failed to fetch history' });
+    }
+});
+
 
 export default router;

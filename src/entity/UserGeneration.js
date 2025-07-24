@@ -18,6 +18,9 @@ const UserGeneration = new EntitySchema({
     videoUrl: {
       type: "varchar",
     },
+        llmChat: {
+      type: "varchar",
+    },
   },
 });
 

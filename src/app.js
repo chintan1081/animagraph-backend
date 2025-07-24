@@ -10,7 +10,11 @@ import dotenv from 'dotenv'
 import  AppDataSource  from './database/ormconfig.js';
 
 dotenv.config();
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'ngrok-skip-browser-warning'],
+}));
 app.use(express.json());
 AppDataSource.initialize().then(() => {
   console.log("Connected to NeonDB");
